@@ -43,4 +43,16 @@ class VoteController extends Controller
 
         return response()->json(['message' => 'Voto computado.', 'voteCounts' => $voteCounts]);
     }
+
+    public function scoreboard()
+    {
+        $voteCounts = DB::table('votes')
+            ->select('option', DB::raw('count(*) as total'))
+            ->groupBy('option')
+            ->pluck('total', 'option');
+
+        // Retorna como JSON
+        return response()->json($voteCounts);
+    }
+
 }
