@@ -16,12 +16,11 @@ class VoteController extends Controller
 
     public function vote(Request $request, $option)
     {
-        // Supondo que as opções válidas sejam 'opcaoA' e 'opcaoB'
-        if (!in_array($option, ['opcaoA', 'opcaoB'])) {
+        // As opções válidas agora são 'fortuneRabbit' e 'fortuneTiger'
+        if (!in_array($option, ['fortuneRabbit', 'fortuneTiger'])) {
             return response()->json(['error' => 'Opção inválida.'], 400);
         }
 
-        // Acho que nao vai ter necessidade de autenticação, mas se tiver, o código abaixo é para pegar o id do usuário
         $userId = auth()->check() ? auth()->id() : null;
 
         // Registra o voto na base de dados
@@ -39,7 +38,7 @@ class VoteController extends Controller
             ->pluck('total', 'option');
 
         // Emite o evento via websocket para atualizar os clientes conectados
-        broadcast(new VoteReceived($option, $voteCounts))->toOthers();
+        broadcast(new VoteReceived($option, $voteCounts));
 
         return response()->json(['message' => 'Voto computado.', 'voteCounts' => $voteCounts]);
     }
@@ -51,8 +50,6 @@ class VoteController extends Controller
             ->groupBy('option')
             ->pluck('total', 'option');
 
-        // Retorna como JSON
         return response()->json($voteCounts);
     }
-
 }

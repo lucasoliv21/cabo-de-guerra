@@ -3,14 +3,10 @@
 namespace App\Events;
 
 use Illuminate\Broadcasting\Channel;
-use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
-use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
-use Illuminate\Foundation\Events\Dispatchable;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Queue\SerializesModels;
 
-class VoteReceived implements ShouldBroadcast
+class VoteReceived implements ShouldBroadcastNow
 {
     use SerializesModels;
 
@@ -25,7 +21,7 @@ class VoteReceived implements ShouldBroadcast
 
     public function broadcastOn()
     {
-        return new Channel('cabo-de-guerra');
+        return new Channel('tugofwar');
     }
 
     public function broadcastAs()
